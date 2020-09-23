@@ -10,18 +10,17 @@ import java.io.InputStream;
 import java.util.concurrent.ArrayBlockingQueue;
 
 public class DataSource {
-    private final String TAG = "MY_TEST " + this.getClass().getSimpleName();
+    private final String TAG = "MY_TEST ";
     HandlerThread mHandlerThread;
     Handler mHandler;
     private final String mPath = "/dev/random";
-    private int mData ;
+    private int mData;
     private ArrayBlockingQueue<byte[]> mDataSource = new ArrayBlockingQueue<byte[]>(1024);
 
     public DataSource() {
-        mHandlerThread = new HandlerThread("Data source");
-        mHandlerThread.start();
-        mHandler = new Handler(mHandlerThread.getLooper());
-        Log.d(TAG, "DataSource: data num " + mData);
+//        mHandlerThread = new HandlerThread("Data source");
+//        mHandlerThread.start();
+//        mHandler = new Handler(mHandlerThread.getLooper());
 //        mHandler.post(new Runnable() {
 //            @Override
 //            public void run() {
@@ -51,8 +50,9 @@ public class DataSource {
         }
     }
 
-    public void setData(int width,int height){
+    public void setData(int width, int height) {
         mData = (int) (width * height * 8 + width * height * 0.25 * 8 * 2) / 8;
+        Log.d(TAG, "Data Size = " + mData);
     }
 
     public synchronized byte[] getData() {

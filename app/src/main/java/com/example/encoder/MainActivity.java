@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    private final String TAG = "MY_TEST " + this.getClass().getSimpleName();
+    private final String TAG = "MY_TEST ";
     private final String mPath = "/dev/random";
     private List<Encoder> mList;
     private int height = 1080;
@@ -34,36 +34,43 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_SETTING_DATA);
         registerReceiver(mReceiver, filter);
-        Log.d(TAG, "Height = " + height + " Width = " + width + " Encoder num = " + num + " KEY_FRAME_RATE = " + key);
+        Log.d(TAG, "默认参数：  Height = " + height + " Width = " + width + " Encoder num = " + num + " KEY_FRAME_RATE = " + key);
         mList = new ArrayList<>(num);
         dataSource = new DataSource();
-        dataSource.setData(width, height);
-        startEncoder();
+//        dataSource.setData(width, height);
+//        startEncoder();
 
     }
 
 
     @Override
     protected void onPause() {
-        unregisterReceiver(mReceiver);
         release();
         Log.d(TAG, "onPause: stop all");
         super.onPause();
     }
 
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(mReceiver);
+        super.onDestroy();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void startEncoder() {
-        mList.clear();
         for (int i = 0; i < num; i++) {
             mList.add(new Encoder("Encoder_" + i, dataSource, width, height, key));
         }
     }
 
     private void release() {
-        for (Encoder encoder : mList) {
-            encoder.release();
+        if (mList != null && mList.size() > 0) {
+            for (Encoder encoder : mList) {
+                encoder.release();
+            }
+            mList.clear();
         }
+
     }
 
     private BroadcastReceiver mReceiver = new BroadcastReceiver() {

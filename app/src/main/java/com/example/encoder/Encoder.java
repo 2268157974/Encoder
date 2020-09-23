@@ -19,7 +19,7 @@ import java.util.Locale;
 
 
 public class Encoder {
-    private String TAG = "MY_TEST " + this.getClass().getSimpleName();
+    private String TAG = "MY_TEST ";
     private HandlerThread mHandlerThread;
     private Handler mHandler;
     private MediaCodec mMediaCodec;
@@ -101,7 +101,7 @@ public class Encoder {
     private synchronized void startTimer() {
         if (mTimerIsStart) return;
         mTimerIsStart = true;
-        Log.d(TAG, "startTimer: " + dateTime());
+        Log.d(TAG, "startTime: " + dateTime());
         mTimer.post(timer);
     }
 
